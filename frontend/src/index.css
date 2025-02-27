@@ -1,0 +1,82 @@
+/* Global Styles */
+body {
+  background-color: #121212; /* Dark background */
+  color: #ffffff; /* White text */
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container */
+.container {
+  display: flex;
+  gap: 40px;
+}
+
+/* Form Box */
+.forms {
+  background-color: #181818; /* Slightly lighter black */
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+/* Headings */
+h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 25px;
+  background-color: #e0e0e0; /* Light gray */
+  color: #000;
+  font-size: 16px;
+  text-align: left;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 25px;
+  background-color: #ffffff; /* White button */
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #dddddd;
+}
+
+/* OR Text */
+.or-text {
+  margin: 15px 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Google Icon */
+.google-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.google-login img {
+  width: 30px;
+  cursor: pointer;
+}
