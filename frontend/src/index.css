@@ -1,6 +1,6 @@
 /* Global Styles */
 body {
-  background-color: #121212; /* Dark background */
+  background-color: #9FB8BF; /* Dark background */
   color: #ffffff; /* White text */
   font-family: Arial, sans-serif;
   display: flex;
@@ -17,17 +17,29 @@ body {
 
 /* Form Box */
 .forms {
-  background-color: #181818; /* Slightly lighter black */
+  background-color: #9FB8BF; /* Slightly lighter black */
   padding: 40px;
   border-radius: 10px;
   text-align: center;
   width: 300px;
 }
-
+/* Select */
+.select{
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 25px;
+  background-color: #FCEABA; /* Light gray */
+  color: #000;
+  font-size: 16px;
+  text-align: left;
+}
 /* Headings */
 h1 {
   font-size: 22px;
   margin-bottom: 20px;
+  color: black;
 }
 
 /* Input Fields */
@@ -37,7 +49,7 @@ input {
   margin: 10px 0;
   border: none;
   border-radius: 25px;
-  background-color: #e0e0e0; /* Light gray */
+  background-color: #FCEABA; /* Light gray */
   color: #000;
   font-size: 16px;
   text-align: left;
@@ -50,7 +62,7 @@ button {
   margin-top: 10px;
   border: none;
   border-radius: 25px;
-  background-color: #ffffff; /* White button */
+  background-color: #FCEABA; /* White button */
   color: #000;
   font-size: 16px;
   font-weight: bold;
