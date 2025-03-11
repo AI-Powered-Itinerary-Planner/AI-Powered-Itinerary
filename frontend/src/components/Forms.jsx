@@ -2,6 +2,8 @@ import axios from "axios";
 import { useForm, useWatch } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom"
+import GoogleAuth from "./GoogleAuth";  
+
 
 const Forms = () => {
     const location = useLocation();
@@ -70,6 +72,10 @@ const Forms = () => {
                     })}type="password" placeholder="Confirm Password" id="confirmpassword" />
                 )}
                 <button type="Submit">Submit</button>
+
+                {/* Google Login Button */}
+                <GoogleAuth /> 
+
                 {isLogin ? ( 
                     <Link to='/register'><h3>New To Voyage AI?</h3></Link>) : (<Link to='/login'><h3>Have An Account?</h3></Link>)}
             </form>
