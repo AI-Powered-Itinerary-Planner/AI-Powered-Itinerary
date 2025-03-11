@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Plantrip from "../pages/Plantrip";
 import Layout from "../components/Layout";
+import Settings from "../pages/Settings";
 
 const router = createBrowserRouter([
     {
@@ -14,8 +15,8 @@ const router = createBrowserRouter([
             { path: "/home", element: <Home /> },
             { path: "/login", element: <Login /> },
             { path: "/register", element: <Register /> },
-            { path: "/plantrip", element: <Plantrip /> }
-            
+            { path: "/plantrip", element: <Plantrip /> },
+            { path: "/settings", element: <Settings />}
         ],
     },
 
