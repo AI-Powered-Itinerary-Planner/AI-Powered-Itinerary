@@ -3,28 +3,22 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Plantrip from "../pages/Plantrip";
+import Layout from "../components/Layout";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home/>,
-        errorElement: <div>404 Not Found</div>
+        element: <Layout />, 
+        errorElement: <div>404 Not Found</div>,
+        children: [
+            { path: "/home", element: <Home /> },
+            { path: "/login", element: <Login /> },
+            { path: "/register", element: <Register /> },
+            { path: "/plantrip", element: <Plantrip /> }
+            
+        ],
     },
-    {
-        path:"/login",
-        element:<Login/>,
-        errorElement: <div>404 Not Found</div>
-    },
-    {
-        path:'/register',
-        element:<Register/>,
-        errorElement:<div>404 Not Found</div>
-    },
-    {
-        path:'/plantrip',
-        element:<Plantrip/>,
-        errorElement:<div>404 Not Found</div>
-    }
+
 ]);
 
 export default router;
