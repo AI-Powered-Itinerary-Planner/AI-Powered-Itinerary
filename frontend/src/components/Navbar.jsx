@@ -17,10 +17,12 @@ const Navbar = () => {
     </div>
     <ul className={menuOpen ? "open" : ""}>
         <li><NavLink to="/home">Home</NavLink></li>
+        <li><NavLink to="/interestPage">Interests</NavLink></li>
         <li><NavLink to="/explore">Explore</NavLink></li>
         <li><NavLink to="/plantrip">Plan Trip</NavLink></li>
         <li><NavLink to="/saved-itineary">Saved Itineary</NavLink></li>
         <li><NavLink to="/register">Register</NavLink></li>
+        <li><NavLink to="/profileCreation">ProfileCreation</NavLink></li>
         <li><NavLink to="/login">Login</NavLink></li>
         <li><NavLink to="/settings">Settings</NavLink></li>
         {/* <li><NavLink to="/about">About</NavLink></li> */}
