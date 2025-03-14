@@ -14,6 +14,7 @@ const router = createBrowserRouter([
         element: <Layout />, 
         errorElement: <div>404 Not Found</div>,
         children: [
+            { index: true, element: <Home /> },
             { path: "/home", element: <Home /> },
             { path: "/login", element: <Login /> },
             { path: "/profileCreation", element: <ProfileCreation /> },

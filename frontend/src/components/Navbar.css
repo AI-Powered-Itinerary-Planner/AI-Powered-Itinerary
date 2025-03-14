@@ -7,8 +7,11 @@ nav {
     justify-content: space-between;
     align-items: center;
     background-color: #0f172a;
-    position: sticky;
+    position: fixed;  /* Changed from sticky to fixed */
     top: 0;
+    left: 0;
+    width: 100%;  /* Ensures the navbar spans the entire width of the page */
+    z-index: 100;  /
 }
 
 nav .title {

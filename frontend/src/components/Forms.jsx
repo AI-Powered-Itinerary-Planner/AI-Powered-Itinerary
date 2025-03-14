@@ -15,27 +15,71 @@ const Forms = () => {
         console.log(data.username);
         if (!isLogin) {
             try {
-                const response = await axios.post('http://localhost:3000/api/register', { username: data.username, email: data.email, password: data.password });
-                console.log(response);
-                if (response.data.error) {
-                    toast.error(response.data.error);
+                const response = await fetch('http://localhost:3000/users/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: data.username,
+                        email: data.email,
+                        password: data.password,
+                    }),
+                });
+        
+                const result = await response.json();
+        
+                if (!response.ok) {
+                    // If the response was not successful, handle the error
+                    toast.error(result.error || "An error occurred during registration");
                 } else {
                     toast.success("User registered successfully");
-                    navigate("/login");
+                    const userData = {
+                        name: result.name,
+                        email: result.email,
+                        login: false
+                    }
+                    navigate("/home", {state : {user: userData}});
                 }
             } catch (error) {
                 console.log(error);
                 toast.error("An error occurred during registration");
             }
         }
-        else{
-            axios.post('http://localhost:3000/login',{email:data.email, password:data.password})
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error));
+        else {
+            try{
+            const response = await fetch('http://localhost:3000/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Ensure the backend understands this is JSON
+                },
+                body: JSON.stringify({
+                    email: data.email,
+                    password: data.password,
+                }),
+            })
+            const result = await response.json();
+            if (!response.ok) {
+                toast.error(result.error || "An error occurred during login");
+            } else {
+                toast.success("Login successful!");
+                const userData = {
+                    name: result.user.name,
+                    email: result.user.email,
+                    login: true,
+                };
+                navigate("/home", { state: { user: userData } });
+                // Redirect user or store authentication token here
+            } 
+            }catch (error) {
+                console.error('Error during login:', error);
+                toast.error("An error occurred while trying to log in.");
+            }
         }
-        }
+    }
     
     return (
+        
         <div className="forms">
             <h1>{isLogin ? "Login" : "Register"}</h1>
             <form onSubmit ={handleSubmit(onSubmit)}> 
