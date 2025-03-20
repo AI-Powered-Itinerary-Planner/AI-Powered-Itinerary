@@ -19,10 +19,12 @@ const Navbar = () => {
     </div>
     <ul className={menuOpen ? "open" : ""}>
         <li><NavLink to="/home" onClick={closeMenu}>Home</NavLink></li>
+        <li><NavLink to="/interestPage" onClick={closeMenu}>Interests</NavLink></li>
         <li><NavLink to="/explore" onClick={closeMenu}>Explore</NavLink></li>
         <li><NavLink to="/plantrip" onClick={closeMenu}>Plan Trip</NavLink></li>
         <li><NavLink to="/saved-itineary" onClick={closeMenu}>Saved Itineary</NavLink></li>
         <li><NavLink to="/register" onClick={closeMenu}>Register</NavLink></li>
+        <li><NavLink to="/profileCreation" onClick={closeMenu}>ProfileCreation</NavLink></li>
         <li><NavLink to="/login" onClick={closeMenu}>Login</NavLink></li>
         <li><NavLink to="/settings" onClick={closeMenu}>Settings</NavLink></li>
         {/* <li><NavLink to="/about">About</NavLink></li> */}
