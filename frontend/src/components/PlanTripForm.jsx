@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from 'react-router-dom';
 
 const travelGroups = [
   { value: "solo", label: "Solo" },
@@ -55,6 +56,8 @@ const PlanTripForm = () => {
   const onSubmit = (data) => {
     console.log("Form Data:", data);
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="forms">
@@ -133,7 +136,7 @@ const PlanTripForm = () => {
         {errors.budget && <p>{errors.budget.message}</p>}
 
         {/* Submit Button */}
-        <button type="submit">Generate Itinerary</button>
+        <button type="submit" onClick={() => navigate('/generateItinerary')}>Generate Itinerary</button>
       </form>
     </div>
   );
