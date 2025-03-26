@@ -1,7 +1,10 @@
 import React from 'react';
 import './ProfileCreation.css'
+import { useNavigate } from 'react-router-dom';
 
 const ProfileCreation = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -28,7 +31,7 @@ const ProfileCreation = () => {
             <input type="text" id="currency" placeholder='Preferred Currency'name="currency" required />
           </div>
 
-          <button type="submit">Create Profile</button>
+          <button type="submit" onClick={() => navigate('/interestPage')}>Create Profile</button>
         </form>
       </div>
     </div>
