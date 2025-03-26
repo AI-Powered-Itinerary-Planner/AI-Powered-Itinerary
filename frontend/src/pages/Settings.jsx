@@ -51,7 +51,7 @@ const Settings = () => {
         <div className="dialog">
           <p>Are you sure you want to logout?</p>
           <button onClick={() => setShowLogoutDialog(false)}>No</button>
-          <button onClick={() => console.log("Logged Out!")}>Yes</button>
+          <button onClick={() => console.log("Logged Out!") & navigate('/home')}>Yes</button>
         </div>
       )}
 
@@ -60,7 +60,7 @@ const Settings = () => {
         <div className="dialog">
           <p>Are you sure you want to delete your account? This action cannot be undone.</p>
           <button onClick={() => setShowDeleteDialog(false)}>No</button>
-          <button onClick={() => console.log("Account Deleted!")}>Yes</button>
+          <button onClick={() => console.log("Account Deleted!") & navigate('/home')}>Yes</button>
         </div>
       )}
     </div>
