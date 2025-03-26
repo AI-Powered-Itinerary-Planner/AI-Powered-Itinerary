@@ -7,6 +7,8 @@ import Layout from "../components/Layout";
 import Settings from "../pages/Settings";
 import ProfileCreation from "../pages/ProfileCreation";
 import InterestPage from "../pages/InterestScreen";
+import Explore from "../pages/Explore";
+import GenerateItinerary from "../pages/GenerateItinerary";
 
 const router = createBrowserRouter([
     {
@@ -21,7 +23,9 @@ const router = createBrowserRouter([
             { path: "/interestPage", element: <InterestPage /> },
             { path: "/register", element: <Register /> },
             { path: "/plantrip", element: <Plantrip /> },
-            { path: "/settings", element: <Settings />}
+            { path: "/settings", element: <Settings />},
+            { path: "/explore", element: <Explore/> },
+            { path: "/generateItinerary", element: <GenerateItinerary/> }
         ],
     },
 

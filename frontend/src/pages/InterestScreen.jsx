@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './InterestScreen.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function InterestPage() {
   const categories = {
@@ -23,6 +24,8 @@ export default function InterestPage() {
     });
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="interest-page">
       <h1 className="title">Choose Your Interest!</h1>
@@ -42,7 +45,7 @@ export default function InterestPage() {
           </div>
         </div>
       ))}
-      <button className="done-button">Done</button>
+      <button className="done-button" onClick={() => navigate('/home')}>Done</button>
     </div>
   );
 }

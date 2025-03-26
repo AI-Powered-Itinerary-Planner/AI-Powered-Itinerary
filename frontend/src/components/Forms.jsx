@@ -115,7 +115,7 @@ const Forms = () => {
                         required:"Confirm Password is required"
                     })}type="password" placeholder="Confirm Password" id="confirmpassword" />
                 )}
-                <button type="Submit">Submit</button>
+                <button type="Submit" onClick={() => navigate(isLogin ? '/home' : '/profileCreation')}>Submit</button>
 
                 {/* Google Login Button */}
                 <GoogleAuth /> 

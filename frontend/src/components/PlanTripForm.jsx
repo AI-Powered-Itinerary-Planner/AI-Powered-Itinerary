@@ -5,6 +5,7 @@ import Select from "react-select";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Dropdown.css";
+import { useNavigate } from 'react-router-dom';
 
 const travelGroups = [
   { value: "solo", label: "Solo" },
@@ -60,6 +61,8 @@ const PlanTripForm = () => {
       console.log("Form Data:", data);
       console.log("Selected Accommodations:",data.accommodation.map((accommodation) => accommodation.value));
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="forms">
@@ -159,7 +162,7 @@ const PlanTripForm = () => {
         {errors.budget && <p>{errors.budget.message}</p>}
 
         {/* Submit Button */}
-        <button type="submit">Generate Itinerary</button>
+        <button type="submit" onClick={() => navigate('/generateItinerary')}>Generate Itinerary</button>
       </form>
     </div>
   );
