@@ -28,17 +28,26 @@ body {
   width: 100%;
 }
 /* Select */
-.select{
+.select {
   width: 100%;
-  padding: 12px;
+  padding: 8px 12px;
   margin: 10px 0;
+  font-size: 16px;
+  color: #000;
+  background-color: #FCEABA;
   border: none;
   border-radius: 25px;
-  background-color: #FCEABA; /* Light gray */
-  color: #000;
-  font-size: 16px;
-  text-align: left;
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 24 24' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+
 /* Headings */
 h1 {
   font-size: 22px;
@@ -57,6 +66,11 @@ input {
   color: #000;
   font-size: 16px;
   text-align: left;
+}
+input::placeholder {
+  color: #000; /* black placeholder */
+  opacity: 1;  /* ensures it's not faded */
+  font-size: 16px;
 }
 
 /* Buttons */
