@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
+import "./Dropdown.css";
 import { useNavigate } from 'react-router-dom';
 
 const travelGroups = [
@@ -50,11 +52,14 @@ const PlanTripForm = () => {
     formState: { errors },
     setValue,
     watch,
+    control,
   } = useForm();
-  const [destinations, setDestinations] = useState([]);
+
 
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
+
+      console.log("Form Data:", data);
+      console.log("Selected Accommodations:",data.accommodation.map((accommodation) => accommodation.value));
   };
 
   const navigate = useNavigate();
@@ -91,37 +96,58 @@ const PlanTripForm = () => {
         </select>
         {errors.travelGroup && <p>{errors.travelGroup.message}</p>}
 
-        {/* Accommodation Select */}
-        <select className="select" {...register("accommodation", { required: "This field is required" })}>
-        <option value="" disabled selected>Select Accomodation Type</option>
-          {accommodationTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-        {errors.accommodation && <p>{errors.accommodation.message}</p>}
+        {/* Multi-Select Dropdown for Accommodation */}
+        <Controller
+          name="accommodation"
+          control={control}
+          rules={{ required: "This field is required" }}
+          render={({ field }) => (
+            <Select
+             {...field}
+              options={accommodationTypes}
+              isMulti
+              placeholder="Accommodation Type"
+              className="multi-select"
+              classNamePrefix="multi-select"
+            />
+          )}
+        />
+        {errors.accommodation && <p className="error">{errors.accommodation.message}</p>}
 
         {/* Transport Select */}
-        <select className="select" {...register("transport", { required: "This field is required" })}>
-        <option value="" disabled selected>Select Transport Type</option>
-          {transportTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="transport"
+          control={control}
+          rules={{ required: "This field is required" }}
+          render={({ field }) => (
+            <Select
+             {...field}
+              options={transportTypes}
+              isMulti
+              placeholder="Transport Type"
+              className="multi-select"
+              classNamePrefix="multi-select"
+            />
+          )}
+        />
         {errors.transport && <p>{errors.transport.message}</p>}
 
         {/* Activity Select */}
-        <select className="select" {...register("activity", { required: "This field is required" })}>
-        <option value="" disabled selected>Select Prefered Activity</option>
-          {activities.map((activity) => (
-            <option key={activity.value} value={activity.value}>
-              {activity.label}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="activities"
+          control={control}
+          rules={{ required: "This field is required" }}
+          render={({ field }) => (
+            <Select
+             {...field}
+              options={activities}
+              isMulti
+              placeholder="Activities"
+              className="multi-select"
+              classNamePrefix="multi-select"
+            />
+          )}
+        />
         {errors.activity && <p>{errors.activity.message}</p>}
         
         {/* Budget Range Select */}
