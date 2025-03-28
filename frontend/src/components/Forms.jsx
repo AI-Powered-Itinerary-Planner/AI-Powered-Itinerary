@@ -15,7 +15,7 @@ const Forms = () => {
         console.log(data.username);
         if (!isLogin) {
             try {
-                const response = await fetch('http://localhost:3000/users/', {
+                const response = await fetch('http://localhost:3001/users/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const Forms = () => {
         }
         else {
             try{
-            const response = await fetch('http://localhost:3000/users/login', {
+            const response = await fetch('http://localhost:3001/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Ensure the backend understands this is JSON
