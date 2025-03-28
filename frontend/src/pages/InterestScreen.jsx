@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './InterestScreen.css';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { UserContext } from '../Context/UserContext';
 
 export default function InterestPage() {
   const categories = {
@@ -10,7 +12,16 @@ export default function InterestPage() {
     "Social & Community": ["Art", "Local Food", "Boba Shop"],
   };
 
+  const { user, setUser } = useContext(UserContext);
   const [selectedInterests, setSelectedInterests] = useState(new Set());
+  const navigate = useNavigate();
+
+  // Load previously saved interests if they exist
+  useEffect(() => {
+    if (user && user.interests && Array.isArray(user.interests)) {
+      setSelectedInterests(new Set(user.interests));
+    }
+  }, [user]);
 
   const toggleInterest = (interest) => {
     setSelectedInterests((prev) => {
@@ -24,7 +35,47 @@ export default function InterestPage() {
     });
   };
 
-  const navigate = useNavigate();
+  const saveInterests = async () => {
+    try {
+      // Convert Set to Array for storage
+      const interestsArray = Array.from(selectedInterests);
+      
+      // Update user in context
+      if (user) {
+        const updatedUser = { ...user, interests: interestsArray };
+        setUser(updatedUser);
+        
+        // Save to localStorage
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        
+        // Try to update on backend if we have a token
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await fetch('http://localhost:3001/users/profile', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token
+            },
+            body: JSON.stringify({ interests: interestsArray })
+          });
+          
+          if (!response.ok) {
+            console.warn('Failed to update interests on server, but saved locally');
+          }
+        }
+        
+        toast.success('Your interests have been saved!');
+        navigate('/home');
+      } else {
+        toast.error('Please log in to save your interests');
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Error saving interests:', error);
+      toast.error('Failed to save interests. Please try again.');
+    }
+  };
 
   return (
     <div className="interest-page">
@@ -45,8 +96,7 @@ export default function InterestPage() {
           </div>
         </div>
       ))}
-      <button className="done-button" onClick={() => navigate('/home')}>Done</button>
+      <button className="done-button" onClick={saveInterests}>Save Interests</button>
     </div>
   );
 }
-

@@ -9,6 +9,7 @@ import ProfileCreation from "../pages/ProfileCreation";
 import InterestPage from "../pages/InterestScreen";
 import Explore from "../pages/Explore";
 import GenerateItinerary from "../pages/GenerateItinerary";
+import EditProfile from "../pages/EditProfile";
 
 const router = createBrowserRouter([
     {
@@ -25,7 +26,8 @@ const router = createBrowserRouter([
             { path: "/plantrip", element: <Plantrip /> },
             { path: "/settings", element: <Settings />},
             { path: "/explore", element: <Explore/> },
-            { path: "/generateItinerary", element: <GenerateItinerary/> }
+            { path: "/generateItinerary", element: <GenerateItinerary/> },
+            { path: "/edit-username", element: <EditProfile /> }
         ],
     },
 
