@@ -6,6 +6,7 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Dropdown.css";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const travelGroups = [
   { value: "solo", label: "Solo" },
@@ -57,6 +58,17 @@ const PlanTripForm = () => {
 
 
   const onSubmit = (data) => {
+      if (!data.startDate || !data.endDate) {
+        toast.error("Please select both start and end dates.");
+        return;
+      }
+    
+      if (data.endDate < data.startDate) {
+        toast.error("End date must be after start date.");
+        return;
+      }
+
+      navigate('/generateItinerary');
 
       console.log("Form Data:", data);
       console.log("Selected Accommodations:",data.accommodation.map((accommodation) => accommodation.value));
@@ -76,14 +88,26 @@ const PlanTripForm = () => {
         />
         {errors.destination && <p>{errors.destination.message}</p>}
 
-        {/* Date Picker */}
+        {/* Start Date Picker */}
         <DatePicker
-          selected={watch("date")}
-          onChange={(date) => setValue("date", date)}
-          placeholderText="Select Date"
-          dateFormat={"dd/MM/yyyy"}
+          selected={watch("startDate")}
+          onChange={(date) => setValue("startDate", date)}
+          placeholderText="Start Date"
+          dateFormat="MM/dd/yyyy"
+          className="date-picker"
         />
-        {errors.date && <p>{errors.date.message}</p>}
+        {errors.startDate && <p>{errors.startDate.message}</p>}
+
+        {/* End Date Picker */}
+        <DatePicker
+          selected={watch("endDate")}
+          onChange={(date) => setValue("endDate", date)}
+          placeholderText="End Date"
+          dateFormat="MM/dd/yyyy"
+          className="date-picker"
+        />
+        {errors.endDate && <p>{errors.endDate.message}</p>}
+
 
         {/* Travel Group Select */}
         <select className="select" {...register("travelGroup", { required: "This field is required" })} >
@@ -162,7 +186,7 @@ const PlanTripForm = () => {
         {errors.budget && <p>{errors.budget.message}</p>}
 
         {/* Submit Button */}
-        <button type="submit" onClick={() => navigate('/generateItinerary')}>Generate Itinerary</button>
+        <button type="submit">Generate Itinerary</button>
       </form>
     </div>
   );
