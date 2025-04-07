@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Settings.css";
 import toast from "react-hot-toast";
 import { UserContext } from "../Context/UserContext";
+import "./Settings.css";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -153,7 +153,12 @@ const Settings = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading user data...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading user data...</p>
+      </div>
+    );
   }
 
   return (
@@ -165,73 +170,128 @@ const Settings = () => {
         </div>
       )}
       
-      {/* Profile Circle */}
-      <div className="profile-circle">
-        {userData.name ? userData.name.charAt(0).toUpperCase() : "?"}
-      </div>
+      <div className="settings-card">
+        {/* Profile Header */}
+        <div className="profile-header">
+          <div className="profile-circle">
+            {userData.name ? userData.name.charAt(0).toUpperCase() : "?"}
+          </div>
+          <div className="profile-title">
+            <h2 className="username">{userData.name || "User"}</h2>
+            <p className="email">{userData.email || "No email provided"}</p>
+          </div>
+        </div>
 
-      {/* Username */}
-      <h2 className="username">{userData.name || "User"}</h2>
-      <p className="email">{userData.email || "No email provided"}</p>
+        {/* Profile Information */}
+        <div className="profile-details">
+          {userData.age && (
+            <div className="detail-item">
+              <span className="detail-label">Age</span>
+              <span className="detail-value">{userData.age}</span>
+            </div>
+          )}
+          
+          {userData.country && (
+            <div className="detail-item">
+              <span className="detail-label">Country</span>
+              <span className="detail-value">{userData.country}</span>
+            </div>
+          )}
+          
+          {userData.zip_code && (
+            <div className="detail-item">
+              <span className="detail-label">Zip Code</span>
+              <span className="detail-value">{userData.zip_code}</span>
+            </div>
+          )}
+          
+          {userData.preferred_currency && (
+            <div className="detail-item">
+              <span className="detail-label">Currency</span>
+              <span className="detail-value">{userData.preferred_currency}</span>
+            </div>
+          )}
+        </div>
 
-      {/* Profile Information */}
-      <div className="profile-info">
-        {userData.age && <p><strong>Age:</strong> {userData.age}</p>}
-        {userData.country && <p><strong>Country:</strong> {userData.country}</p>}
-        {userData.zip_code && <p><strong>Zip Code:</strong> {userData.zip_code}</p>}
-        {userData.preferred_currency && <p><strong>Preferred Currency:</strong> {userData.preferred_currency}</p>}
+        {/* Interests */}
         {userData.interests && userData.interests.length > 0 && (
-          <p><strong>Interests:</strong> {Array.isArray(userData.interests) ? userData.interests.join(", ") : userData.interests}</p>
+          <div className="interests-section">
+            <h3>Interests</h3>
+            <div className="interests-tags">
+              {Array.isArray(userData.interests) ? 
+                userData.interests.map((interest, index) => (
+                  <span key={index} className="interest-tag">{interest}</span>
+                )) : 
+                <span className="interest-tag">{userData.interests}</span>
+              }
+            </div>
+          </div>
         )}
+
+        {/* Edit Profile Button */}
+        <button className="btn edit-btn" onClick={handleEditProfile}>
+          <i className="fas fa-user-edit"></i> Edit Profile
+        </button>
+
+        {/* Language Preferences */}
+        <div className="settings-section">
+          <h3>Language Preferences</h3>
+          <div className="language-selector">
+            <select 
+              value={language} 
+              onChange={(e) => setLanguage(e.target.value)}
+              className="language-dropdown"
+            >
+              <option value="English">English</option>
+              <option value="Spanish">Español</option>
+              <option value="French">Français</option>
+              <option value="German">Deutsch</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Account Actions */}
+        <div className="account-actions">
+          <button className="btn logout-btn" onClick={() => setShowLogoutDialog(true)}>
+            <i className="fas fa-sign-out-alt"></i> Logout
+          </button>
+          <button className="btn delete-btn" onClick={() => setShowDeleteDialog(true)}>
+            <i className="fas fa-trash-alt"></i> Delete Account
+          </button>
+        </div>
       </div>
-
-      {/* Edit Profile Button */}
-      <button className="edit-btn" onClick={handleEditProfile}>
-        Edit Profile
-      </button>
-
-      {/* Language Preferences */}
-      <div className="language-container">
-        <h3>Language Preferences</h3>
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-          <option value="English">English</option>
-          <option value="Spanish">Spanish</option>
-          <option value="French">French</option>
-          <option value="German">German</option>
-        </select>
-      </div>
-
-      {/* Logout Button */}
-      <button className="logout-btn" onClick={() => setShowLogoutDialog(true)}>
-        Logout
-      </button>
-
-      {/* Delete Account Button */}
-      <button className="delete-btn" onClick={() => setShowDeleteDialog(true)}>
-        Delete Account
-      </button>
 
       {/* Logout Confirmation Dialog */}
       {showLogoutDialog && (
-        <div className="dialog">
-          <p>Are you sure you want to logout?</p>
-          <button onClick={() => setShowLogoutDialog(false)}>No</button>
-          <button onClick={() => {
-            setShowLogoutDialog(false);
-            handleLogout();
-          }}>Yes</button>
+        <div className="dialog-overlay">
+          <div className="dialog">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+            <div className="dialog-actions">
+              <button className="btn cancel-btn" onClick={() => setShowLogoutDialog(false)}>Cancel</button>
+              <button className="btn confirm-btn" onClick={() => {
+                setShowLogoutDialog(false);
+                handleLogout();
+              }}>Logout</button>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Delete Account Confirmation Dialog */}
       {showDeleteDialog && (
-        <div className="dialog">
-          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-          <button onClick={() => setShowDeleteDialog(false)}>No</button>
-          <button onClick={() => {
-            setShowDeleteDialog(false);
-            handleDeleteAccount();
-          }}>Yes</button>
+        <div className="dialog-overlay">
+          <div className="dialog">
+            <h3>Delete Account</h3>
+            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div className="dialog-actions">
+              <button className="btn cancel-btn" onClick={() => setShowDeleteDialog(false)}>Cancel</button>
+              <button className="btn delete-confirm-btn" onClick={() => {
+                setShowDeleteDialog(false);
+                handleDeleteAccount();
+              }}>Delete</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
