@@ -50,18 +50,22 @@ export default function InterestPage() {
         
         // Try to update on backend if we have a token
         const token = localStorage.getItem('token');
-        if (token) {
-          const response = await fetch('http://localhost:3001/users/profile', {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token
-            },
-            body: JSON.stringify({ interests: interestsArray })
-          });
-          
-          if (!response.ok) {
-            console.warn('Failed to update interests on server, but saved locally');
+        console.log('Token:', token);
+        if (updatedUser.id) {
+          try {
+            const response = await fetch(`http://localhost:3001/users/${updatedUser.id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                interests: interestsArray.join(', ')
+              })
+            });
+            
+          } catch (error) {
+            console.error("Error updating profile on backend:", error);
+            // Continue with localStorage update only
           }
         }
         
