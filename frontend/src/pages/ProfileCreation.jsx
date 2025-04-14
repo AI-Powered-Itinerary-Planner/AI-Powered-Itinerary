@@ -19,6 +19,7 @@ const ProfileCreation = () => {
   
   useEffect(() => {
     // Pre-fill form with user data if available
+    console.log("User context:", user);
     if (user?.name) {
       reset({
         fullName: user.name,
@@ -81,7 +82,7 @@ const ProfileCreation = () => {
       if (setUser) {
         setUser(updatedUser);
       }
-      
+      console.log("User context updated:", parsedUser.id);
       // Try to update backend if we have an ID
       if (parsedUser.id) {
         try {
