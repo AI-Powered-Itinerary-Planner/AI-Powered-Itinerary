@@ -5,6 +5,8 @@ import "./Settings.css";
 const Settings = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [inputUsername, setInputUsername] = useState("");
+  const [editUsername, setEditUsername] = useState(false)
   const [language, setLanguage] = useState("English");
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -21,9 +23,15 @@ const Settings = () => {
       <h2 className="username">{username}</h2>
 
       {/* Edit Username Button */}
-      <button className="edit-btn" onClick={() => navigate("/edit-username")}>
-        Edit Username
-      </button>
+      {editUsername ? (
+        <div>
+          <input type="text" value={inputUsername} onChange={(e) => setInputUsername(e.target.value)}></input>
+          <button onClick={() => {setUsername(inputUsername); setEditUsername(false)}}>Change Username</button>
+        </div>
+      ) : (
+        <button className="edit-btn" onClick={() => {setInputUsername(username); setEditUsername(true)}}>Edit Username</button>
+      )}
+      
 
       {/* Language Preferences */}
       <div className="language-container">
