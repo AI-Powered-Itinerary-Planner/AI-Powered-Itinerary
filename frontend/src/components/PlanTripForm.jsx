@@ -69,6 +69,7 @@ const PlanTripForm = () => {
   const [numDays, setNumDays] = useState(0);
   const arrivalDate = watch("arrivalDateTime");
   const departureDate = watch("departureDateTime");
+  const travelGroup = watch("travelGroup");
 
   const toggleSection = (key) => {
     setSections((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -122,6 +123,16 @@ const PlanTripForm = () => {
       setNumDays(calculatedDays);
     }
   }, [arrivalDate, departureDate]);
+
+  useEffect(() => {
+    if (travelGroup === "solo") {
+      setNumPeople(1);
+      setPeopleAges([""]);
+    } else if (travelGroup === "couple") {
+      setNumPeople(2);
+      setPeopleAges(["", ""]);
+    }
+  }, [travelGroup]);
 
   return (
     <div className="forms">
@@ -213,6 +224,14 @@ const PlanTripForm = () => {
               value={numPeople}
               onChange={handleNumPeopleChange}
               placeholder="Number of People"
+              disabled={travelGroup === "solo" || travelGroup === "couple"}
+    title={
+      travelGroup === "solo"
+        ? "Fixed to 1 for Solo travel"
+        : travelGroup === "couple"
+        ? "Fixed to 2 for Couple travel"
+        : ""
+      }
             />
         </div>
 

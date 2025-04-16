@@ -72,6 +72,11 @@ input::placeholder {
   opacity: 1;  /* ensures it's not faded */
   font-size: 16px;
 }
+input:disabled {
+  cursor: not-allowed;          /* shows 🚫 cursor */
+  background-color: #f0f0f0;    /* optional: gray it out */
+  color: #888;                  /* optional: light text */
+}
 
 /* Buttons */
 button {
