@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
@@ -45,7 +45,6 @@ const budgetRanges = [
   { value: "10000$-max", label: "10000$-max"}
   
 ];
-
 const PlanTripForm = () => {
   const {
     register,
@@ -55,6 +54,7 @@ const PlanTripForm = () => {
     watch,
     control,
   } = useForm();
+  const formTopRef = useRef(null);
 
   const navigate = useNavigate();
   const [sections, setSections] = useState({
@@ -70,9 +70,20 @@ const PlanTripForm = () => {
   const arrivalDate = watch("arrivalDateTime");
   const departureDate = watch("departureDateTime");
   const travelGroup = watch("travelGroup");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const toggleSection = (key) => {
-    setSections((prev) => ({ ...prev, [key]: !prev[key] }));
+    setSections((prev) => {
+      const updated = { ...prev, [key]: !prev[key] };
+  
+      if (!prev[key]) {
+        setTimeout(() => {
+          formTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+  
+      return updated; // ✅ this is correct and MUST be here
+    });
   };
 
 
@@ -95,8 +106,91 @@ const PlanTripForm = () => {
         toast.error("Number of places cannot exceed the total days of the trip.");
         return;
       }
+      const buildPrompt = (formData, numDays) => {
+        const accommodation = formData.accommodation?.map(a => a.label || a.value).join(", ") || "Any";
+        const transport = formData.transport?.map(t => t.label || a.value).join(", ") || "Any";
+        const activities = formData.activities?.map(a => a.label || a.value).join(", ") || "General sightseeing";
+      
+        return `
+      You are an expert AI travel planner specializing in crafting highly detailed, time-optimized, and budget-focused travel itineraries. Your task is to generate a professionally structured itinerary for the following trip:
+      
+      Generate a ${numDays}-day itinerary for a ${formData.travelGroup} traveler visiting ${formData.destination} from ${formData.arrivalDateTime} to ${formData.departureDateTime}. The traveler prefers a relaxed pace, has a ${formData.budget} budget, and requires ${accommodation} accommodation with ${transport} as the preferred mode of transport.
+     
+     ---
 
-      navigate('/generateItinerary');
+      Important preferences:
+      - Food: Non-Vegetarian
+      - Must-try cuisine: Local Food
+      - Avoid: Museums
+      - Activities of interest: ${activities}
+      - Special needs: ${formData.specialNeeds || "None"} (must be strictly honored)
+      - Number of travelers: ${formData.peopleAges?.length || 1}
+      - Purpose: Leisure
+     ---
+      CRITICAL RESPONSE RULES:
+      - Always respond only in JSON — **never include markdown formatting or commentary
+      - The root object must contain an "itinerary" array
+      - For **follow-up questions**, edits, or single-day changes, return the **entire JSON itinerary** again
+      - If editing a single day, **only that day's content should change**, but still return the full itinerary
+      - Never wrap output in triple backticks
+      - Never include any text or explanation outside the JSON
+
+      
+      Strictly follow these rules when creating the itinerary:
+      - Precise minute-based scheduling (e.g., "8:00 AM - 8:15 AM: Wake up & freshen up")
+      - Exact travel times, routes, and distances (e.g., "Drive via A61 highway, ~45 min")
+      - Specific hotel names, addresses, and amenities
+      - Named restaurant recommendations for every meal (include cuisine type, signature dishes, and whether a reservation is required)
+      - Backup options for each activity
+      - Local insider tips to avoid crowds or discover hidden gems
+      - Weather considerations (e.g., "If it rains, visit XYZ indoor attraction instead")
+      - Dress code and required essentials
+      - Include a relaxing evening closure each day (spa, lounge, night drive, etc.)
+      - Include hotel amenities in daily activities
+      - Strictly return your response in the following JSON format (no extra commentary):
+      
+      \`\`\`json
+      {
+        "itinerary": [
+          {
+            "day": 1,
+            "title": "Day 1 Title Here",
+            "activities": [
+              { "time": "8:00 AM - 9:00 AM", "description": "Activity description here" },
+              ...
+            ]
+          }
+        ]
+      }
+      \`\`\`
+      `;
+      };
+      const prompt = buildPrompt(formData, numDays);
+
+      setIsGenerating(true);
+      fetch('http://localhost:3001/itineraries/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt: prompt
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          const itinerary = data.itinerary;
+          localStorage.setItem('generatedItinerary', itinerary);
+          localStorage.setItem('prompt', prompt);
+          navigate('/generateItinerary');
+        })
+        .catch(err => {
+          console.error("Itinerary generation failed:", err);
+          toast.error("Failed to generate itinerary. Try again.");
+        })
+        .finally(() => {
+          setIsGenerating(false);
+        });
 
       console.log("Form Data:", formData);
       console.log("Selected Accommodations:",data.accommodation.map((accommodation) => accommodation.value));
@@ -119,7 +213,7 @@ const PlanTripForm = () => {
 
   useEffect(() => {
     if (arrivalDate && departureDate) {
-      const calculatedDays = (new Date(departureDate) - new Date(arrivalDate)) / (1000 * 3600 * 24);
+      const calculatedDays = (new Date(departureDate) - new Date(arrivalDate)) / (1000 * 3600 * 24) + 1;
       setNumDays(calculatedDays);
     }
   }, [arrivalDate, departureDate]);
@@ -134,10 +228,20 @@ const PlanTripForm = () => {
     }
   }, [travelGroup]);
 
+  if (isGenerating) {
+    return (
+      <div className="loading-screen">
+        <h2>✈️ Generating your itinerary...</h2>
+        <p>This might take a few seconds.</p>
+        <div className="spinner"></div> {/* Add a CSS loader or use any animation */}
+      </div>
+    );
+  }
+
   return (
     <div className="forms">
       <h1>Plan Your Trip</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} ref={formTopRef}>
       <h2 onClick={() => toggleSection('basic')}>📍 Basic Info {sections.basic ? "▲" : "▼"}</h2>
       {sections.basic && (
           <>
