@@ -1,13 +1,17 @@
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
-import Forms from "../components/Forms";
-
+import { useLocation } from "react-router-dom";
+import GoogleAuth from "../components/GoogleAuth";
 
 const Login = () => {
-  const location = useLocation();
-  console.log(location);
   return (
     <div className="login">
-      <Forms/>
+      <div className="oauth-container">
+        <h1>Login</h1>
+        <p>Continue with Google to access your account</p>
+        <div className="google-signin-wrapper">
+          <GoogleAuth />
+        </div>
+        <p className="privacy-note">We only use Google for authentication.<br/>No password is stored in our database.</p>
+      </div>
     </div>
   );
 }
