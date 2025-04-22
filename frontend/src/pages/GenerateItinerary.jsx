@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import "./GenerateItinerary.css";
@@ -46,12 +47,10 @@ const GenerateItinerary = () => {
         if (extracted?.itinerary) setItineraryData(extracted.itinerary);
       }
     } else {
-      const initial = localStorage.getItem("generatedItinerary");
-      if (initial) {
-        const extracted = extractJsonFromMarkdown(initial);
-        if (extracted?.itinerary) setItineraryData(extracted.itinerary);
-        setMessages([{ role: "assistant", content: initial }]);
-      }
+        const initial = localStorage.getItem("generatedItinerary");
+        if (initial) {
+          setMessages([{ role: "assistant", content: initial }]);
+        }
     }
   }, []);
 
@@ -87,14 +86,11 @@ const GenerateItinerary = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setMessages((prev) => [
-          ...prev,
+        const newMessages = [
           { role: "user", content: userInput },
           { role: "assistant", content: data.reply }
-        ]);
-  
-        const extracted = extractJsonFromMarkdown(data.reply);
-        if (extracted?.itinerary) setItineraryData(prev => [...prev, extracted.itinerary]);
+        ];
+        setMessages(prev => [...prev, ...newMessages]);
       })
       .finally(() => setIsThinking(false));
   };
@@ -115,35 +111,28 @@ const GenerateItinerary = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {itineraryData.map((day, idx) => (
-          <div key={idx} className="day-card">
-            <h2>Day {day.day}: {day.title}</h2>
-            <ul className="activity-list">
-              {day.activities.map((act, i) => (
-                <li key={i} className="activity-item">
-                  <span className="activity-time">{act.time}</span>
-                  <p className="activity-desc">{act.description}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
 
-        {messages.length > 1 && (
+        {messages.length > 0 && (
           <div className="chat-box">
-            {messages.slice(1).map((msg, idx) => {
-  const parsedJson = extractJsonFromMarkdown(msg.content);
-  const isJson = msg.role === "assistant" && parsedJson;
+            {messages.map((msg, idx) => {
+  const parsed = extractJsonFromMarkdown(msg.content);
+  const isAssistantJson = msg.role === "assistant" && parsed?.itinerary;
 
   return (
-    <div key={idx}>
+    <div key={idx} className={`chat-message-wrapper ${msg.role}`}>
       <div className={`chat-message ${msg.role}`}>
-        {!isJson ? <pre>{msg.content}</pre> : <p>✅ Here's your updated itinerary:</p>}
+        {msg.role === "user" ? (
+          <p>{msg.content}</p>
+        ) : isAssistantJson ? (
+          <p>✅ Here's your updated itinerary:</p>
+        ) : (
+          <pre>{msg.content}</pre>
+        )}
       </div>
 
-      {isJson && parsedJson.itinerary && (
-        <div className="versioned-itinerary">
-          {parsedJson.itinerary.map((day, dIdx) => (
+      {isAssistantJson && (
+        <div className="itinerary-render">
+          {parsed.itinerary.map((day, dIdx) => (
             <div key={dIdx} className="day-card">
               <h2>Day {day.day}: {day.title}</h2>
               <ul className="activity-list">

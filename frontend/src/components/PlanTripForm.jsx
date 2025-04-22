@@ -166,6 +166,7 @@ const PlanTripForm = () => {
       `;
       };
       const prompt = buildPrompt(formData, numDays);
+      console.log ("Prompt:", prompt);
 
       setIsGenerating(true);
       fetch('http://localhost:3001/itineraries/generate', {
