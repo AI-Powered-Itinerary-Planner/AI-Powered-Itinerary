@@ -50,10 +50,12 @@ const PlanTripForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
+    control,
   } = useForm();
   const formTopRef = useRef(null);
 
-  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [sections, setSections] = useState({
     basic: true,
@@ -238,7 +240,7 @@ const PlanTripForm = () => {
   }
 
   return (
-    <div className="trip-prompt-container">
+    <div className="forms">
       <h1>Plan Your Trip</h1>
       <form onSubmit={handleSubmit(onSubmit)} ref={formTopRef}>
       <h2 onClick={() => toggleSection('basic')}>📍 Basic Info {sections.basic ? "▲" : "▼"}</h2>
@@ -278,7 +280,8 @@ const PlanTripForm = () => {
               defaultValue="" // Set default value if needed
             />
           )}
-        </p>
+        />
+        {errors.arrivalDateTime && <p>{errors.arrivalDateTime.message}</p>}
       </div>
 
       {/* Departure Date and Time */}
@@ -430,26 +433,50 @@ const PlanTripForm = () => {
         />
         {errors.transport && <p>{errors.transport.message}</p>}
         </div>
-        
-        <div className="prompt-tips">
-          <h3>Tips for better results:</h3>
-          <ul>
-            <li>Mention your destination(s)</li>
-            <li>Include travel dates or duration</li>
-            <li>Specify travel group (solo, family, etc.)</li>
-            <li>Mention budget range</li>
-            <li>List preferred activities or interests</li>
-            <li>Note any special requirements</li>
-          </ul>
+
+        {/* Activity Select */}
+        <div>
+        <label>Activities</label>
+        <Controller
+          name="activities"
+          control={control}
+          rules={{ required: "This field is required" }}
+          render={({ field }) => (
+            <Select
+             {...field}
+              options={activities}
+              isMulti
+              placeholder="Activities"
+              className="multi-select"
+              classNamePrefix="multi-select"
+            />
+          )}
+        />
+        {errors.activity && <p>{errors.activity.message}</p>}
         </div>
-        
-        <button 
-          type="submit" 
-          className="generate-button"
-          disabled={isLoading}
-        >
-          {isLoading ? "Generating..." : "Generate Itinerary"}
-        </button>
+        </>
+        )}
+        <h2 onClick={() => toggleSection('budget')}>💰 Budget {sections.budget ? "▲" : "▼"}</h2>
+        {sections.budget && (
+          <>
+        <div>
+        <label>Budget</label>
+        {/* Budget Range Select */}
+        <select className="select" {...register("budget", { required: "This field is required" })}>
+        <option value="" disabled selected>Select Budget Range</option>
+          {budgetRanges.map((range) => (
+            <option key={range.value} value={range.value}>
+              {range.label}
+            </option>
+          ))}
+        </select>
+        {errors.budget && <p>{errors.budget.message}</p>}
+        </div>
+        </>
+        )}
+
+        {/* Submit Button */}
+        <button type="submit">Generate Itinerary</button>
       </form>
     </div>
   );
