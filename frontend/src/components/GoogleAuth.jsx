@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 import toast from "react-hot-toast";
 
-const GoogleAuth = () => {
+const GoogleAuth = ({ buttonText = "Sign in with Google" }) => {
   const navigate = useNavigate();  
   const location = useLocation();
   const isLogin = location.pathname === "/login";
@@ -77,7 +77,12 @@ const GoogleAuth = () => {
 
   return (
     <GoogleOAuthProvider clientId="81270836381-l781r2e2kcd5ecg9d9ae3ke51tii106c.apps.googleusercontent.com">
-      <GoogleLogin onSuccess={handleSuccess} onError={handleFailure} />
+      <GoogleLogin 
+        onSuccess={handleSuccess} 
+        onError={handleFailure}
+        text={buttonText}
+        shape="rectangular"
+      />
     </GoogleOAuthProvider>
   );
 };

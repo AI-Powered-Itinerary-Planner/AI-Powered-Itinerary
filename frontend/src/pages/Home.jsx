@@ -11,10 +11,7 @@ const Home = () => {
   const isRegister = user?.isNewUser;
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      // Optionally redirect or show guest options
-      console.log("No user logged in");
-    }
+    // Check login status silently, no console logs needed
   }, [user]);
 
   return (

@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px); /* Account for header */
+  background-color: #9FB8BF;
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+}
+
+.oauth-container {
+  padding: 60px 40px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.oauth-container h1 {
+  color: #1B2936;
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.oauth-container p {
+  color: #1B2936;
+  font-size: 16px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.google-signin-wrapper {
+  margin: 30px 0;
+}
+
+.google-signin-wrapper button,
+.google-auth-button {
+  background-color: #1B2936 !important;
+  color: #FCEABA !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  border-radius: 30px !important;
+  padding: 12px 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+  font-size: 16px !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.google-signin-wrapper button:hover,
+.google-auth-button:hover {
+  background-color: #FCEABA !important;
+  color: #1B2936 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+
+.google-signin-wrapper button img,
+.google-icon {
+  margin-right: 10px !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.privacy-note {
+  font-size: 14px !important;
+  color: #1B2936 !important;
+  margin-top: 30px !important;
+  opacity: 0.7 !important;
+  line-height: 1.5 !important;
+}
+
+.app-logo {
+  font-size: 28px;
+  color: #FCEABA;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+}
+
+.app-logo span {
+  color: #1B2936;
+}
+
+@media (max-width: 600px) {
+  .oauth-container {
+    padding: 30px 20px;
+  }
+  
+  .oauth-container h1 {
+    font-size: 26px;
+  }
+  
+  .google-signin-wrapper button {
+    font-size: 14px !important;
+  }
+}

@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import GoogleAuth from "../components/GoogleAuth";
+import "./Login.css";
 
 const Login = () => {
   return (
@@ -10,7 +11,7 @@ const Login = () => {
         <div className="google-signin-wrapper">
           <GoogleAuth />
         </div>
-        <p className="privacy-note">We only use Google for authentication.<br/>No password is stored in our database.</p>
+        <p className="privacy-note">We only use Google for authentication.</p>
       </div>
     </div>
   );
