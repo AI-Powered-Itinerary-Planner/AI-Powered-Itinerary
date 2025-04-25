@@ -8,7 +8,7 @@ const Register = () => {
         <h1>Create Your Account</h1>
         <p>Get started with Google</p>
         <div className="google-signin-wrapper">
-          <GoogleAuth />
+          <GoogleAuth buttonText="Register with Google" />
         </div>
         <p className="privacy-note">We only use Google for authentication.<br/>No password is stored in our database.</p>
         <Link to="/login" className="auth-link">Already have an account? Login</Link>
