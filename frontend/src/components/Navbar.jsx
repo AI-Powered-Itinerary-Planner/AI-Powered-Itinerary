@@ -35,7 +35,7 @@ const Navbar = () => {
                         <li><NavLink to="/interestPage" onClick={closeMenu}>Interests</NavLink></li>
                         <li><NavLink to="/explore" onClick={closeMenu}>Explore</NavLink></li>
                         <li><NavLink to="/plantrip" onClick={closeMenu}>Plan Trip</NavLink></li>
-                        <li><NavLink to="/saved-itineary" onClick={closeMenu}>Saved Itineraries</NavLink></li>
+                        <li><NavLink to="/savedItinerary" onClick={closeMenu}>Saved Itineraries</NavLink></li>
                         <li><NavLink to="/settings" onClick={closeMenu}>Settings</NavLink></li>
                     </>
                 ) : (

@@ -1,0 +1,39 @@
+.itinerary-details-page {
+    padding-top: 210px;
+    max-width: 768px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  .itinerary-card-container {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    max-height: 85vh;        /* 👈 makes content scrollable inside */
+    overflow-y: auto;
+  }
+  
+  .day-card {
+    background: #f9f9f9;
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  
+  .activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .activity-item {
+    margin-bottom: 1.25rem;
+  }
+  
+  .activity-time {
+    font-weight: bold;
+    color: #3366ff;
+    display: block;
+  }

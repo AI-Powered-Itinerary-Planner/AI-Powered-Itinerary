@@ -158,3 +158,29 @@
     font-weight: 600;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
+  .save-form-modal {
+    position: fixed;
+    top: 15%;
+    left: 5%;
+    right: 5%;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .save-form-modal input,
+  .save-form-modal button {
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  .save-form-modal button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }

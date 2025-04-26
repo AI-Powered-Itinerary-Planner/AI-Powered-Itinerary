@@ -15,6 +15,7 @@ const PlanTripForm = () => {
   // ✅ Load user from DB using ID stored in localStorage
   useEffect(() => {
     const stored = localStorage.getItem("user");
+    console.log("Stored user data:", stored);
     if (!stored) {
       toast.error("Please log in.");
       navigate("/login");
@@ -22,6 +23,7 @@ const PlanTripForm = () => {
     }
 
     const parsed = JSON.parse(stored);
+    console.log("Parsed user data:", parsed);
     if (!parsed?.id) return;
 
     fetch(`http://localhost:3001/users/${parsed.id}`)
