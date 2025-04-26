@@ -1,21 +1,186 @@
-.page {
-    padding-top: 100px;
-}
-
-
-#itinerary {
-    background-color: #FCEABA;
-    color: black;
-    padding: 1em;
-}
-
-
-.disclaimer {
-    color: black;
-}
-
-
-#buttons {
+/* 🌍 Page Container */
+.itinerary-page {
+  padding-top: 150px;
+    max-width: 700px;
+    margin: auto;
     display: flex;
-    justify-content: center;
-}
+    flex-direction: column;
+    min-height: 100vh;
+    background: #9FB8BF;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+
+  pre {
+    white-space: pre-wrap;       /* wrap like normal text */
+    word-break: break-word;      /* break long words */
+    overflow-wrap: break-word;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #1e293b;
+  }
+  
+  /* 🧠 Elegant Header */
+  .heading {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #0f172a;
+    color: white;
+    letter-spacing: 1px;
+  }
+  
+  /* 🪞 Modern Glassy Itinerary Box */
+  .itinerary-box {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 75vh; /* or auto */
+    padding: 20px;
+    border-radius: 16px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  /* 📝 Pre-styled text */
+  .itinerary-text {
+    white-space: pre-wrap;
+    font-size: 1rem;
+    color: #334155;
+    line-height: 1.6;
+  }
+  
+  /* 💬 Chat Message Styling */
+  .chat-message {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 16px;
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    max-width: 90%;
+  }
+  
+  .chat-message.user {
+    background-color: #dbeafe;
+    text-align: right;
+    margin-left: auto;
+  }
+  
+  .chat-message.assistant {
+    background-color: #f1f5f9;
+    text-align: left;
+    margin-right: auto;
+  }
+  
+  /* 🧠 Chat Input Styling */
+  .chat-input-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding: 12px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    
+  }
+  
+  .chat-input-wrapper input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    font-size: 1rem;
+    background-color: #f8fafc;
+  }
+  
+  .chat-input-wrapper button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .chat-input-wrapper button:hover {
+    background-color: #2563eb;
+  }
+  .day-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+  }
+  
+  .day-card h2 {
+    margin-bottom: 12px;
+    color: #1e293b;
+  }
+  
+  .activity-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .activity-item {
+    margin-bottom: 12px;
+  }
+  
+  .activity-time {
+    font-weight: 600;
+    color: #3b82f6;
+  }
+  
+  .activity-desc {
+    margin-top: 4px;
+    color: #334155;
+  }
+  
+  /* 🚀 Plan Another Trip Button */
+  .back-btn {
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: linear-gradient(to right, #3b82f6, #2563eb);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .save-form-modal {
+    position: fixed;
+    top: 15%;
+    left: 5%;
+    right: 5%;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .save-form-modal input,
+  .save-form-modal button {
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  .save-form-modal button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }

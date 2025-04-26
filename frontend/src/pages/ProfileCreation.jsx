@@ -231,10 +231,14 @@ const ProfileCreation = () => {
               preferred_currency: data.preferredCurrency,
               preferred_travel_group: data.preferredTravelGroup?.value,
               preferred_accommodation: preferredAccommodation,
-              preferred_transport: preferredTransport,
+              preferred_transportation: preferredTransport,
               preferred_activities: preferredActivities,
-              preferred_budget: data.preferredBudget?.value,
-              special_needs: data.specialNeeds
+              preferred_budget_range: data.preferredBudget?.value || "", 
+              special_needs: data.specialNeeds,
+              typical_travel_group_size: numPeople || 1,
+              travel_companions_ages: travelCompanionsAges,
+              companion_interests: companionInterests && Object.keys(companionInterests).length > 0 ? 
+                                    JSON.stringify(companionInterests) : ''
             })
           });
           

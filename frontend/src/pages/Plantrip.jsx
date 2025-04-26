@@ -2,7 +2,7 @@ import PlanTripForm from "../components/PlanTripForm";
 
 const Plantrip = () => {
     return (
-         <div>
+         <div className="main-content">
             <PlanTripForm/>
         </div>
     );

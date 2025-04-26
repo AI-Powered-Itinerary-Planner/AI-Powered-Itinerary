@@ -10,6 +10,8 @@ import InterestPage from "../pages/InterestScreen";
 import Explore from "../pages/Explore";
 import GenerateItinerary from "../pages/GenerateItinerary";
 import EditProfile from "../pages/EditProfile";
+import SavedItinerary from "../pages/SavedItinerary";
+import ItineraryDetails from "../pages/itineraryDetails";
 
 const router = createBrowserRouter([
     {
@@ -27,7 +29,10 @@ const router = createBrowserRouter([
             { path: "/settings", element: <Settings />},
             { path: "/explore", element: <Explore/> },
             { path: "/generateItinerary", element: <GenerateItinerary/> },
+            { path : "/savedItinerary", element: <SavedItinerary/> },
+            { path : "/itineraryDetails/:id", element: <ItineraryDetails/> },
             { path: "/edit-username", element: <EditProfile /> }
+
         ],
     },
 

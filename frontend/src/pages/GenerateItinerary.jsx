@@ -1,43 +1,288 @@
-import './GenerateItinerary.css';
 
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
+import "./GenerateItinerary.css";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
+const extractJsonFromMarkdown = (text) => {
+    const fenced = text.match(/```json\s*([\s\S]*?)```/);
+    if (fenced && fenced[1]) {
+      try {
+        return JSON.parse(fenced[1]);
+      } catch (e) {
+        console.error("JSON fenced parsing failed", e);
+      }
+    }
+  
+    // Fallback: try to extract raw object (e.g., starts with '{')
+    const braceMatch = text.match(/{[\s\S]*}/);
+    if (braceMatch) {
+      try {
+        return JSON.parse(braceMatch[0]);
+      } catch (e) {
+        console.error("Raw JSON parsing failed", e);
+      }
+    }
+  
+    return null;
+};
 
 const GenerateItinerary = () => {
-    return(
-        <div class="page">
-            <h1>Mystical Highlands Adventure: A 5-Day Journey Through Nature & Legends</h1>
-            <div id="itinerary">
-                Day 1: Arrival & Enchantment Begins<br/>
-                📍 Arrival at Highland Lodge – Check into a cozy, mist-covered lodge nestled in the hills.<br/>
-                🥘 Dinner at The Hollow Tavern – Enjoy a rustic meal by candlelight, featuring hearty local cuisine.<br/>
-                🌌 Evening Walk to Starlit Ridge – A guided walk to a scenic viewpoint for stargazing.<br/>
-                <br/>
-                Day 2: Ancient Castles & Hidden Waterfalls<br/>
-                🏰 Explore Shadowmere Castle – A legendary castle rumored to be haunted.<br/>
-                🚶 Hike to Whispering Falls – A scenic 2-hour trek to a secluded waterfall.<br/>
-                🍷 Dinner at The Raven’s Roost – A medieval-themed restaurant serving authentic Highland fare.<br/>
-                <br/>
-                Day 3: Mystical Lakes & Forgotten Caves<br/>
-                🚤 Boat Tour on Mirror Lake – A guided sunrise boat ride on a glassy, reflective lake.<br/>
-                🕵️ Explore the Echoing Caves – A cavern system filled with glowing moss and ancient carvings.<br/>
-                🔥 Campfire Tales & Folk Music – End the night with live storytelling around a crackling fire.<br/>
-                <br/>
-                Day 4: Adventure & Adrenaline<br/>
-                🏹 Archery & Falconry Experience – Train with skilled falconers and try your hand at traditional archery.<br/>
-                🧗 Rock Climbing on Dragon’s Peak – A guided climb with breathtaking views.<br/>
-                🌿 Relax at Mistwood Spa – Wind down with a herbal bath and massage.<br/>
-                <br/>
-                Day 5: Farewell & Final Legends<br/>
-                🍵 Breakfast at The Hidden Hearth – A quiet café with fresh-baked pastries.<br/>
-                📖 Visit the Lost Library of Eldoria – A hidden bookstore with rare manuscripts.<br/>
-                ✈️ Depart with Memories of the Highlands
+  const [itineraryData, setItineraryData] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
+  const bottomRef = useRef(null);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const [showSaveForm, setShowSaveForm] = useState(false);
+  const [title, setTitle] = useState("");
+  const [destination, setDestination] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  useEffect(() => {
+    const savedChat = localStorage.getItem("chatHistory");
+    if (savedChat) {
+      const parsedChat = JSON.parse(savedChat);
+      setMessages(parsedChat);
+
+      const firstAssistantReply = parsedChat.find((msg) => msg.role === "assistant");
+      if (firstAssistantReply) {
+        const extracted = extractJsonFromMarkdown(firstAssistantReply.content);
+        if (extracted?.itinerary) setItineraryData(extracted.itinerary);
+      }
+    } else {
+        const initial = localStorage.getItem("generatedItinerary");
+        if (initial) {
+          setMessages([{ role: "assistant", content: initial }]);
+        }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("chatHistory", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const openSaveForm = () => {
+    setShowSaveForm(true);
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!userInput.trim()) return;
+  
+    const prompt = localStorage.getItem("prompt");
+    console.log(prompt);
+  
+    const baseMessages = [
+      { role: "user", content: prompt },
+    ];
+  
+    const updatedMessages = [...baseMessages, ...messages, { role: "user", content: userInput }];
+    setUserInput("");
+    setIsThinking(true);
+  
+    fetch("http://localhost:3001/itineraries/converse", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: updatedMessages })
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const newMessages = [
+          { role: "user", content: userInput },
+          { role: "assistant", content: data.reply }
+        ];
+        setMessages(prev => [...prev, ...newMessages]);
+      })
+      .finally(() => setIsThinking(false));
+  };
+
+  const handleBack = () => {
+    localStorage.removeItem("chatHistory");
+    localStorage.removeItem("generatedItinerary");
+    navigate("/plantrip");
+  };
+
+  const handleSaveItinerary = async () => {
+    const latest = [...messages].reverse().find(m => m.role === "assistant" && m.content.includes('"itinerary":'));
+    if (!latest) {
+      toast.error("No itinerary found to save.");
+      return;
+    }
+  
+    const parsed = extractJsonFromMarkdown(latest.content);
+    if (!parsed?.itinerary) {
+      toast.error("Itinerary format is invalid.");
+      return;
+    }
+  
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!user?.id) {
+      toast.error("You must be logged in to save an itinerary.");
+      return;
+    }
+  
+    const token = localStorage.getItem("token");
+  
+    try {
+      const response = await fetch("http://localhost:3001/itineraries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          auth_id: user.id,
+          title,
+          destination,
+          start_date: startDate,
+          end_date: endDate,
+          json_data: parsed,
+          description: "Generated by AI",
+        }),
+      });
+  
+      const result = await response.json();
+      if (result.success) {
+        toast.success("Itinerary saved!");
+        localStorage.removeItem("chatHistory");
+        localStorage.removeItem("generatedItinerary");
+        navigate("/savedItinerary");
+      } else {
+        toast.error(result.message || "Save failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save itinerary.");
+    }
+  };
+
+  return (
+    <div className="itinerary-page">
+      <h1 className="heading">Your Itinerary</h1>
+
+      <motion.div
+        className="itinerary-box"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+
+        {messages.length > 0 && (
+          <div className="chat-box">
+            {messages.map((msg, idx) => {
+  const parsed = extractJsonFromMarkdown(msg.content);
+  const isAssistantJson = msg.role === "assistant" && parsed?.itinerary;
+
+  return (
+    <div key={idx} className={`chat-message-wrapper ${msg.role}`}>
+      <div className={`chat-message ${msg.role}`}>
+        {msg.role === "user" ? (
+          <p>{msg.content}</p>
+        ) : isAssistantJson ? (
+          <p>✅ Here's your updated itinerary:</p>
+        ) : (
+          <pre>{msg.content}</pre>
+        )}
+      </div>
+
+      {isAssistantJson && (
+        <div className="itinerary-render">
+          {parsed.itinerary.map((day, dIdx) => (
+            <div key={dIdx} className="day-card">
+              <h2>Day {day.day}: {day.title}</h2>
+              <ul className="activity-list">
+                {day.activities.map((act, aIdx) => (
+                  <li key={aIdx} className="activity-item">
+                    <span className="activity-time">{act.time}</span>
+                    <p className="activity-desc">{act.description}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p class="disclaimer">The itinerary is AI-generated. It was generated by ChatGPT.</p>
-            <div id="buttons">
-                <button>Modify</button>
-                <button>Regenerate</button>
-                <button>Save</button>
-            </div>
+          ))}
         </div>
-    )
-}
+      )}
+    </div>
+  );
+})}
+            <div ref={bottomRef} />
+          </div>
+        )}
+
+        <form onSubmit={handleSend} className="chat-input-wrapper">
+          <input
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Ask something like 'Make it romantic...'"
+          />
+          <button type="submit" disabled={isThinking}>
+            {isThinking ? "..." : "Send"}
+          </button>
+        </form>
+      </motion.div>
+
+      <motion.button
+        className="back-btn"
+        whileHover={{ scale: 1.05 }}
+        onClick={handleBack}
+      >
+        🔙 Plan Another Trip
+      </motion.button>
+
+      <motion.button
+        className="save-btn"
+        whileHover={{ scale: 1.05 }}
+        onClick={openSaveForm}
+       
+      >
+        💾 Save Itinerary
+      </motion.button>
+
+
+      {showSaveForm && (
+  <div className="save-form-modal">
+    <h3>📝 Save Itinerary</h3>
+    <input
+      type="text"
+      placeholder="Itinerary Title"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+    />
+    <input
+      type="text"
+      placeholder="Destination"
+      value={destination}
+      onChange={(e) => setDestination(e.target.value)}
+    />
+    <input
+      type="date"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+    />
+    <input
+      type="date"
+      value={endDate}
+      onChange={(e) => setEndDate(e.target.value)}
+    />
+    <button onClick={handleSaveItinerary}>✅ Save</button>
+    <button onClick={() => setShowSaveForm(false)}>❌ Cancel</button>
+  </div>
+)}
+      
+    </div>
+    
+  );
+  
+};
+
 export default GenerateItinerary;

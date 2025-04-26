@@ -1,4 +1,9 @@
 /* Global Styles */
+* {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
 body {
   background-color: #9FB8BF; /* Dark background */
   color: #ffffff; /* White text */
@@ -7,12 +12,27 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  
+}
+
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100vw;
 }
 
 /* Container */
 .container {
   display: flex;
   gap: 40px;
+}
+.main-content {
+  padding-top: 70px; /* or whatever your navbar height is */
 }
 
 /* Form Box */
@@ -26,6 +46,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
+
 }
 /* Select */
 .select {
@@ -71,6 +92,11 @@ input::placeholder {
   color: #000; /* black placeholder */
   opacity: 1;  /* ensures it's not faded */
   font-size: 16px;
+}
+input:disabled {
+  cursor: not-allowed;          /* shows 🚫 cursor */
+  background-color: #f0f0f0;    /* optional: gray it out */
+  color: #888;                  /* optional: light text */
 }
 
 /* Buttons */

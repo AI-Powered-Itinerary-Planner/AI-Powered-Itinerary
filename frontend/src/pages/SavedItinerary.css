@@ -1,0 +1,32 @@
+.saved-itineraries-page {
+    padding: 2rem;
+  }
+  
+  .itinerary-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .saved-itinerary-card {
+    background: #FCEABA;
+    color: black; 
+    border-radius: 10px;
+    padding: 1rem;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .saved-itinerary-card h2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .btn {
+    margin-top: 1rem;
+    background-color: #0070f3;
+    color: black;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }

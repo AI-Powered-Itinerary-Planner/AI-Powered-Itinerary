@@ -34,7 +34,7 @@ const Home = () => {
         <>
           <button onClick={() => navigate("/explore")}>Explore</button>
           <button onClick={() => navigate("/plantrip")}>Plan Trip</button>
-          <button onClick={() => navigate("/saveditineraries")}>Saved Itineraries</button>
+          <button onClick={() => navigate("/savedItinerary")}>Saved Itineraries</button>
           <button onClick={() => navigate("/settings")}>Settings</button>
         </>
       )}
