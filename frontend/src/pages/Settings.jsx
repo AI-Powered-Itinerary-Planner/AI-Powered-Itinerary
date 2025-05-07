@@ -108,6 +108,10 @@ const Settings = () => {
       
       if (storedUser.id) {
         // Call backend to delete the user account
+        await fetch(`http://localhost:3001/itineraries/user/${storedUser.id}`, {
+          method: 'DELETE'
+        });
+
         const response = await fetch(`http://localhost:3001/users/${storedUser.id}`, {
           method: 'DELETE'
         });
